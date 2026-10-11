@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriSuri PH — My Analytics</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="icon" type="image/png" href="assets/Logo_AgriSuri.png">
+  <style>
+    ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-thumb{background:#2f5f29;border-radius:6px}
+    .app-background{background:linear-gradient(180deg,#f3f8f2 0%,#e8f3e6 40%,#ddebd9 100%)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .fade-up{animation:fadeUp 0.5s ease forwards}
+  </style>
+</head>
+<body class="h-full font-sans antialiased text-gray-800 app-background min-h-screen pb-24">
+
+  <!-- HEADER -->
+  <header class="bg-white px-4 py-3 border-b border-emerald-100 flex items-center justify-between sticky top-0 z-40 shadow-sm">
+    <div class="flex items-center gap-3">
+      <a href="index.html" class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#1b5e20]">
+        <i class="fa-solid fa-arrow-left text-sm"></i>
+      </a>
+      <div>
+        <h1 class="text-[#1b5e20] font-black text-base leading-none">Aking Analytics</h1>
+        <p class="text-[10px] text-gray-500 mt-0.5" id="user-subtitle">AgriSuri PH</p>
+      </div>
+    </div>
+    <button onclick="exportCSV()" class="bg-[#1b5e20] text-white text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5">
+      <i class="fa-solid fa-download"></i> CSV
+    </button>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-4 py-5 space-y-5">
+
+    <!-- SUMMARY CARDS -->
+    <div class="grid grid-cols-2 gap-3 fade-up">
+      <div class="bg-white rounded-3xl p-4 shadow-sm border border-emerald-100 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-[#1b5e20] flex items-center justify-center"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <div><p class="text-[10px] font-black text-gray-400 uppercase">Total Scans</p><p class="text-xl font-black text-gray-800" id="s-total">0</p></div>
+      </div>
+      <div class="bg-white rounded-3xl p-4 shadow-sm border border-emerald-100 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-red-100 text-red-700 flex items-center justify-center"><i class="fa-solid fa-virus"></i></div>
+        <div><p class="text-[10px] font-black text-gray-400 uppercase">May Sakit</p><p class="text-xl font-black text-gray-800" id="s-diseased">0</p></div>
+      </div>
+      <div class="bg-white rounded-3xl p-4 shadow-sm border border-emerald-100 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center"><i class="fa-solid fa-circle-check"></i></div>
+        <div><p class="text-[10px] font-black text-gray-400 uppercase">Malusog</p><p class="text-xl font-black text-gray-800" id="s-healthy">0</p></div>
+      </div>
+      <div class="bg-white rounded-3xl p-4 shadow-sm border border-emerald-100 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center"><i class="fa-solid fa-bullseye"></i></div>
+        <div><p class="text-[10px] font-black text-gray-400 uppercase">Avg Accuracy</p><p class="text-xl font-black text-gray-800" id="s-avg">0%</p></div>
+      </div>
+    </div>
+
+    <!-- SEVERITY BAR -->
+    <div class="bg-white rounded-3xl p-4 shadow-sm border border-emerald-100 fade-up">
+      <p class="text-xs font-black text-[#1b5e20] uppercase tracking-wider mb-3">Severity Level</p>
+      <div class="flex gap-1 h-3 rounded-full overflow-hidden" id="sev-bar">
+        <div class="bg-green-400" id="sev-mild" style="flex:1"></div>
+        <div class="bg-amber-400" id="sev-mod" style="flex:0.01"></div>
+        <div class="bg-red-500" id="sev-sev" style="flex:0.01"></div>
+      </div>
+      <div class="flex justify-between mt-2 text-[10px] text-gray-500 font-semibold">
+        <span>🟢 Mild: <span id="sev-mild-n">0</span></span>
+        <span>🟡 Moderate: <span id="sev-mod-n">0</span></span>
+        <span>🔴 Severe: <span id="sev-sev-n">0</span></span>
+      </div>
+    </div>
+
+    <!-- DISEASE CHART -->
+    <div class="bg-white rounded-3xl p-5 shadow-sm border border-emerald-100 fade-up">
+      <p class="text-xs font-black text-[#1b5e20] uppercase tracking-wider mb-3">Disease Breakdown</p>
+      <div class="relative h-48"><canvas id="c-disease"></canvas></div>
+    </div>
+
+    <!-- CROP CHART -->
+    <div class="bg-white rounded-3xl p-5 shadow-sm border border-emerald-100 fade-up">
+      <p class="text-xs font-black text-[#1b5e20] uppercase tracking-wider mb-3">Rice vs Tomato</p>
+      <div class="relative h-40"><canvas id="c-crop"></canvas></div>
+    </div>
+
+    <!-- DETECTION HISTORY -->
+    <div class="bg-white rounded-3xl shadow-sm border border-emerald-100 overflow-hidden fade-up">
+      <div class="px-4 py-3 border-b border-gray-100">
+        <p class="text-xs font-black text-[#1b5e20] uppercase tracking-wider">Kasaysayan ng Detections</p>
+      </div>
+      <div id="history-list" class="divide-y divide-gray-50">
+        <div class="p-4 text-center text-gray-400 text-sm">Nilo-load...</div>
+      </div>
+    </div>
+
+    <!-- EMPTY STATE (hidden by default) -->
+    <div id="empty-state" class="hidden text-center py-10 space-y-3 fade-up">
+      <div class="text-5xl">🌱</div>
+      <p class="font-black text-[#1b5e20]">Wala pang detections</p>
+      <p class="text-sm text-gray-500">Mag-detect ng sakit para makita ang iyong analytics dito.</p>
+      <a href="index.html" class="inline-block bg-[#1b5e20] text-white font-bold text-sm px-5 py-2.5 rounded-2xl mt-2">🔍 Mag-detect ngayon</a>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const sb = window.supabase.createClient(
+      'https://qyiqodoqvavrqfddaxbn.supabase.co',
+      'sb_publishable_T-usxsctS9q0qHvvw-_FJA_rxOtH1yN'
+    );
+    let myDets = [], charts = {};
+
+    sb.auth.getSession().then(async({data:{session}}) => {
+      if (!session) { window.location.href='auth.html'; return; }
+      const {data:p} = await sb.from('users').select('name,barangay').eq('id',session.user.id).single();
+      if (p) document.getElementById('user-subtitle').textContent = `👨‍🌾 ${p.name||''} · ${p.barangay||'Peñaranda'}`;
+      const {data} = await sb.from('detections').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(100);
+      myDets = data || [];
+      render();
+    });
+
+    function render() {
+      if (!myDets.length) { document.getElementById('empty-state').classList.remove('hidden'); return; }
+
+      const total    = myDets.length;
+      const diseased = myDets.filter(d=>!d.disease?.toLowerCase().includes('healthy')).length;
+      const healthy  = total - diseased;
+      const avgConf  = Math.round(myDets.reduce((s,d)=>s+(d.confidence||0),0)/total);
+      const mild     = myDets.filter(d=>d.severity==='mild').length;
+      const mod      = myDets.filter(d=>d.severity==='moderate').length;
+      const sev      = myDets.filter(d=>d.severity==='severe').length;
+      const rice     = myDets.filter(d=>d.crop==='rice').length;
+      const tomato   = myDets.filter(d=>d.crop==='tomato').length;
+
+      // Stats
+      document.getElementById('s-total').textContent   = total;
+      document.getElementById('s-diseased').textContent = diseased;
+      document.getElementById('s-healthy').textContent  = healthy;
+      document.getElementById('s-avg').textContent      = avgConf + '%';
+
+      // Severity bar
+      document.getElementById('sev-mild').style.flex   = String(mild||0.01);
+      document.getElementById('sev-mod').style.flex    = String(mod||0.01);
+      document.getElementById('sev-sev').style.flex    = String(sev||0.01);
+      document.getElementById('sev-mild-n').textContent = mild;
+      document.getElementById('sev-mod-n').textContent  = mod;
+      document.getElementById('sev-sev-n').textContent  = sev;
+
+      // Disease chart
+      const dc={};
+      myDets.forEach(d=>dc[d.disease]=(dc[d.disease]||0)+1);
+      const top5=Object.entries(dc).sort((a,b)=>b[1]-a[1]).slice(0,5);
+      if(charts.d) charts.d.destroy();
+      charts.d = new Chart(document.getElementById('c-disease'),{
+        type:'bar',
+        data:{ labels:top5.map(([d])=>d), datasets:[{ data:top5.map(([,c])=>c), backgroundColor:['#c05000','#b84a00','#8a5a00','#1e7a3e','#d04000'], borderRadius:8 }] },
+        options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{beginAtZero:true}} }
+      });
+
+      // Crop chart
+      if(charts.c) charts.c.destroy();
+      charts.c = new Chart(document.getElementById('c-crop'),{
+        type:'doughnut',
+        data:{ labels:['🌾 Palay','🍅 Kamatis'], datasets:[{ data:[rice,tomato], backgroundColor:['#1b5e20','#c05000'], borderWidth:2, borderColor:'#fff' }] },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right',labels:{font:{size:11}}}} }
+      });
+
+      // History list
+      document.getElementById('history-list').innerHTML = myDets.slice(0,20).map(d=>{
+        const isH   = d.disease?.toLowerCase().includes('healthy');
+        const cc    = d.confidence>=85?'text-emerald-700':d.confidence>=70?'text-amber-600':'text-red-600';
+        return `<div class="flex items-center gap-3 px-4 py-3">
+          <span class="text-xl">${d.crop==='rice'?'🌾':'🍅'}</span>
+          <div class="flex-1 min-w-0">
+            <p class="font-bold text-sm truncate ${isH?'text-emerald-700':'text-red-700'}">${d.disease||'—'}</p>
+            <p class="text-[10px] text-gray-400">${fmtDate(d.created_at)}</p>
+          </div>
+          <span class="font-black text-sm ${cc}">${d.confidence||'—'}%</span>
+        </div>`;
+      }).join('');
+    }
+
+    function exportCSV() {
+      if (!myDets.length) { alert('Walang data pa para i-export.'); return; }
+      const h = ['Date','Crop','Disease','Confidence','Severity'];
+      const r = myDets.map(d=>[fmtDate(d.created_at),d.crop,d.disease,d.confidence,d.severity||'']);
+      const csv = [h,...r].map(x=>x.map(c=>`"${c}"`).join(',')).join('\n');
+      const blob = new Blob([csv],{type:'text/csv'});
+      const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='my_detections.csv';
+      document.body.appendChild(a); a.click(); setTimeout(()=>document.body.removeChild(a),100);
+    }
+
+    function fmtDate(s) {
+      if(!s) return '—';
+      return new Date(s).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
+    }
+  </script>
+</body>
+</html>

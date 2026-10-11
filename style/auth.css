@@ -1,0 +1,353 @@
+* {
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    transition: 500ms;
+
+    overflow: none;
+
+    -webkit-user-select: none; /* Safari / iOS */
+    -moz-user-select: none;    /* Firefox */
+    user-select: none;         /* Modern browsers */
+    /*border: 1px solid red;*/
+}
+
+/* ==========================================
+   1. Page Load Animation Setup
+   ========================================== */
+@keyframes fadeSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px); /* Starts 40px below final position */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);    /* Moves back to original position */
+    }
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    max-width: fit-content; 
+    margin: 0 auto;
+
+  
+    /* 1. Full height & centering setup */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem; /* Prevents form from touching edges on small screens */
+
+
+    /* 2. Default Background Image (Desktop / Landscape) */
+    background-image: url('../assets/Background_Landscape.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* 3. Mobile Background Switch (Phones & Small Screens) */
+@media (max-width: 768px) {
+    body {
+        background-image: url('../assets/Background_Portrait.png');
+    }
+}
+
+    .container {
+        width: 100%;
+        max-width: fit-content;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centers .branding and .form-box */
+    }
+
+        /* ==========================================
+        2. Animated Elements (Branding & Button)
+        ========================================== */
+        .branding, 
+        .button-wrapper {
+            opacity: 0;
+            animation: fadeSlideUp 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .branding {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers logo image and heading block */
+            text-align: center;   /* Centers text lines (h1, p) */
+            animation-delay: 0.1s;
+        }
+
+        .logo {
+            width: 8rem;
+            height: auto; /* Changed from 8% to auto so the image maintains its aspect ratio */
+            margin-bottom: 0.25rem;
+        }
+
+        #title {
+            font-size: 2.113rem;
+            color: #056526;
+            pointer-events: none;
+            margin-bottom: 0.5rem;
+        }    
+
+
+
+
+
+        .form-card,
+        .form-card * {
+            transition: 500ms;
+            animation: fadeSlideUp 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .form-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 440px;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(5, 101, 38, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e3ede5;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+            /* Pill Tab Navigation Bar */
+            .tab-switcher {
+                background-color: #f0f4f1;
+                padding: 5px;
+                border-radius: 14px;
+                display: flex;
+                gap: 4px;
+                margin-bottom: 1.5rem;
+            }
+
+            .tab-btn {
+                flex: 1;
+                padding: 0.75rem 1rem;
+                border: none;
+                background: transparent;
+                border-radius: 10px;
+                font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+                font-weight: 700;
+                color: #056526;
+                cursor: pointer;
+                transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+                text-align: center;
+            }
+
+            .tab-btn.active {
+                background-color: #ffffff;
+                color: #056526;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            }
+
+            .tab-btn:hover:not(.active) {
+                background-color: rgba(255, 255, 255, 0.5);
+            }
+
+            /* Scrollable Form Body (Prevents card resize and page overflow) */
+            .form-fields-scroll {
+                max-height: 340px;
+                overflow-y: auto;
+                padding-right: 4px;
+                margin-bottom: 0.5rem;
+            }
+
+            /* Custom Scrollbar for Inner Fields */
+            .form-fields-scroll::-webkit-scrollbar {
+                width: 5px;
+            }
+
+            .form-fields-scroll::-webkit-scrollbar-thumb {
+                background-color: #c2d6c6;
+                border-radius: 10px;
+            }
+
+            /* Form Field Group Styling */
+            .field-group {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 1.25rem;
+                opacity: 1;
+                transition: all 0.3s ease;
+            }
+
+            .field-group.hidden {
+                display: none;
+                opacity: 0;
+            }
+
+            label {
+                font-size: clamp(0.7rem, 2vw, 0.8rem);
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                color: #056526;
+                text-transform: uppercase;
+                margin-bottom: 0.5rem;
+            }
+
+            input {
+                width: 100%;
+                padding: 0.85rem 1.1rem;
+                font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+                border: 1.5px solid #c2d6c6;
+                border-radius: 12px;
+                outline: none;
+                background-color: #ffffff;
+                color: #2b3a2e;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            input::placeholder {
+                color: #a0b3a3;
+                font-weight: 500;
+            }
+
+            input:focus {
+                border-color: #056526;
+                box-shadow: 0 0 0 3px rgba(5, 101, 38, 0.12);
+            }
+
+            /* Password Eye Button Container */
+            .password-wrapper {
+                position: relative;
+                display: flex;
+                align-items: center;
+                width: 100%;
+            }
+
+            .password-wrapper input {
+                padding-right: 2.75rem;
+            }
+
+            .toggle-password-btn {
+                position: absolute;
+                right: 0.75rem;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                color: #056526;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.25rem;
+            }
+
+            .toggle-password-btn svg {
+                width: 18px;
+                height: 18px;
+                stroke: currentColor;
+                fill: none;
+                stroke-width: 2;
+            }
+
+            /* Bottom Action Buttons Alignment */
+            .action-row {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 0.75rem;
+                margin-top: 1.25rem;
+            }
+
+            /* Clear Button */
+            .btn-clear {
+                background: #ffffff;
+                border: 1.5px solid #c2d6c6;
+                color: #6e8773;
+                padding: 0.65rem 1.25rem;
+                border-radius: 10px;
+                font-size: 0.95rem;
+                font-weight: 700;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .btn-clear:hover {
+                background-color: #f7fbf8;
+                border-color: #a0be9f;
+                color: #056526;
+            }
+
+            .btn-clear svg {
+                width: 17px;
+                height: 17px;
+                stroke: currentColor;
+                stroke-width: 2;
+                fill: none;
+            }
+
+            /* Submit Button */
+            .btn-submit {
+                background: #015e26;
+                border: 1.5px solid #015e26;
+                color: #ffffff;
+                padding: 0.65rem 1.35rem;
+                border-radius: 10px;
+                font-size: 0.95rem;
+                font-weight: 700;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                box-shadow: 0 4px 12px rgba(1, 94, 38, 0.2);
+            }
+
+            .btn-submit:hover {
+                background: #02471d;
+                border-color: #02471d;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 16px rgba(1, 94, 38, 0.3);
+            }
+
+            .btn-submit:active {
+                transform: translateY(0);
+            }
+
+            .btn-submit svg {
+                width: 18px;
+                height: 18px;
+                stroke: #ffffff;
+                stroke-width: 2.5;
+                fill: none;
+                transition: transform 0.2s ease;
+            }
+
+            .btn-submit:hover svg {
+                transform: translateX(3px);
+            }
+
+            /* Feedback Toast Notification */
+            .toast {
+                position: fixed;
+                bottom: 24px;
+                left: 50%;
+                transform: translateX(-50%) translateY(100px);
+                background: #015e26;
+                color: #ffffff;
+                padding: 0.75rem 1.5rem;
+                border-radius: 50px;
+                font-weight: 600;
+                font-size: 0.9rem;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+                opacity: 0;
+                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                pointer-events: none;
+                z-index: 1000;
+            }
+
+            .toast.show {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }

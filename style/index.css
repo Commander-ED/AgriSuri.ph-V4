@@ -1,0 +1,410 @@
+/* ==========================================================================
+   🎨 1. AGRI-SURI PH COLOR PALETTE (EXTRACTED EXACTLY FROM AUTH)
+   ========================================================================== */
+:root {
+  /* --- AUTH BRAND GREENS --- */
+  --color-brand-title: #056526;      /* Title, Labels, Tab Active, Focus Border */
+  --color-primary-submit: #015e26;   /* Primary Buttons, Toasts, Main Accents */
+  --color-primary-hover: #02471d;    /* Button Hover State */
+  --color-brand-subtle: #94a78a;     /* Subtitles, Location Tag, Footer Text */
+
+  /* --- TEXT & INPUT COLORS --- */
+  --color-text-main: #2b3a2e;        /* Dark Body Text */
+  --color-text-muted: #6e8773;       /* Secondary Text / Inactive Links */
+  --color-placeholder: #a0b3a3;      /* Input Placeholder Text */
+  --color-text-white: #ffffff;       /* White Text on Solid Buttons */
+
+  /* --- CARD & PANEL BACKGROUNDS --- */
+  --bg-card: #ffffff;                /* Main Work Area Card Background */
+  --bg-panel-glass: rgba(255, 255, 255, 0.94); /* Glass Sidebar & Header */
+  --bg-pill-switcher: #f0f4f1;       /* Navigation Pill Track */
+  --bg-hover-subtle: #f7fbf8;        /* Subtle Button Hover Background */
+
+  /* --- BORDERS & SCROLLBARS --- */
+  --border-card: #e3ede5;            /* Auth Card Border */
+  --border-input: #c2d6c6;           /* Input & Secondary Borders, Scrollbar Thumb */
+  --border-hover: #a0be9f;           /* Secondary Hover Border */
+
+  /* --- SHADOWS & RINGS --- */
+  --shadow-auth-card: 0 10px 30px rgba(5, 101, 38, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-submit-btn: 0 4px 12px rgba(1, 94, 38, 0.2);
+  --shadow-submit-hover: 0 6px 16px rgba(1, 94, 38, 0.3);
+  --focus-ring-glow: 0 0 0 3px rgba(5, 101, 38, 0.12);
+
+  /* --- SIZES --- */
+  --sidebar-width: 30%;
+  --header-height: 14%;
+}
+
+/* ==========================================================================
+   2. GLOBAL RESET & ANIMATIONS (YOUR EXACT AUTH SETUP)
+   ========================================================================== */
+* {
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    transition: 500ms ease;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+@keyframes fadeSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   3. BODY & BACKGROUND LAYOUT (100% UNCHANGED)
+   ========================================================================== */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    overflow-x: hidden;
+
+    /* Desktop Background */
+    background-image: url('../assets/Background_Landscape.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Mobile Background Switch */
+@media (max-width: 768px) {
+    body {
+        background-image: url('../assets/Background_Portrait.png');
+    }
+}
+
+/* ==========================================================================
+   4. DASHBOARD CONTAINER & GLASS WORKSPACE
+   ========================================================================== */
+.app-container {
+  width: 100%;
+  max-width: 1240px;
+  min-height: 88vh;
+  display: flex;
+  background-color: var(--bg-panel-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-card);
+  border-radius: 20px;
+  box-shadow: var(--shadow-auth-card);
+  overflow: hidden;
+  animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --------------------------------------------------------------------------
+   5. SIDEBAR NAVIGATION
+   -------------------------------------------------------------------------- */
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--bg-card);
+  border-right: 1px solid var(--border-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  flex-shrink: 0;
+}
+
+.branding {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-card);
+}
+
+.logo {
+  width: 2.75rem;
+  height: auto;
+}
+
+#title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--color-brand-title);
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 6px;
+  border-radius: 14px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-brand-title);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover:not(.active) {
+  background-color: rgba(192, 255, 150, 0.3)
+}
+
+.nav-link.active {
+  background-color: var(--bg-card);
+  color: var(--color-brand-title);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.btn-logout {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-input);
+  color: var(--color-text-muted);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-logout:hover {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+/* --------------------------------------------------------------------------
+   6. MAIN WORKSPACE WRAPPER
+   -------------------------------------------------------------------------- */
+.workspace-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Header Bar */
+.top-header {
+  height: var(--header-height);
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.header-title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--color-brand-title);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.location-badge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-brand-title);
+  background-color: var(--bg-pill-switcher);
+  padding: 0.4rem 0.85rem;
+  border-radius: 20px;
+  border: 1px solid var(--border-card);
+}
+
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--color-text-main);
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  background-color: var(--color-primary-submit);
+  color: var(--color-text-white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+/* Scrollbar Styled to Match Auth Inner Scroll */
+.main-content::-webkit-scrollbar {
+  width: 6px;
+}
+.main-content::-webkit-scrollbar-thumb {
+  background-color: var(--border-input);
+  border-radius: 10px;
+}
+
+/* Auth Style Form Card in Workspace */
+.form-card {
+  background: var(--bg-card);
+  width: 100%;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: var(--shadow-auth-card);
+  border: 1px solid var(--border-card);
+}
+
+.card-title {
+  color: var(--color-brand-title);
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.card-subtitle {
+  color: var(--color-brand-subtle);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Standard Inputs Matching Auth Form */
+label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--color-brand-title);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+input {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  font-size: 0.95rem;
+  border: 1.5px solid var(--border-input);
+  border-radius: 12px;
+  outline: none;
+  background-color: var(--bg-card);
+  color: var(--color-text-main);
+}
+
+input::placeholder {
+  color: var(--color-placeholder);
+  font-weight: 500;
+}
+
+input:focus {
+  border-color: var(--color-brand-title);
+  box-shadow: var(--focus-ring-glow);
+}
+
+/* Action Buttons Matching Auth Form */
+.btn-submit {
+  background: var(--color-primary-submit);
+  border: 1.5px solid var(--color-primary-submit);
+  color: var(--color-text-white);
+  padding: 0.65rem 1.35rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-submit-btn);
+}
+
+.btn-submit:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-submit-hover);
+}
+
+.btn-clear {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-input);
+  color: var(--color-text-muted);
+  padding: 0.65rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.btn-clear:hover {
+  background-color: var(--bg-hover-subtle);
+  border-color: var(--border-hover);
+  color: var(--color-brand-title);
+}
+
+/* Footer Tagline Inside Workspace */
+.workspace-footer {
+  margin-top: 1.5rem;
+  color: var(--color-brand-subtle);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   7. RESPONSIVE BREAKPOINT
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  body {
+    padding: 0.5rem;
+  }
+
+  .app-container {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-card);
+  }
+
+  .top-header {
+    padding: 0 1rem;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+}

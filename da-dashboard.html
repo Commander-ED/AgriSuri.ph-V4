@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriSuri PH — DA Officer</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="icon" type="image/png" href="assets/Logo_AgriSuri.png">
+  <style>
+    ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-thumb{background:#1e5fa5;border-radius:6px}
+    .app-bg{background:linear-gradient(180deg,#f0f4f8 0%,#e6eef6 100%)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .fade-up{animation:fadeUp 0.5s ease forwards}
+    .live-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 1.5s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+    @media print{.no-print{display:none!important}}
+  </style>
+</head>
+<body class="h-full font-sans antialiased text-gray-800 app-bg flex flex-col md:flex-row overflow-x-hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="hidden md:flex md:w-64 lg:w-72 bg-[#0d3b6e] text-white flex-col shrink-0 min-h-screen shadow-2xl z-40 sticky top-0 h-screen">
+    <div class="p-5 border-b border-blue-800/80 flex items-center gap-3">
+      <div class="w-11 h-11 bg-white p-1.5 rounded-xl">
+        <img src="assets/Logo_AgriSuri.png" class="w-full h-full object-contain">
+      </div>
+      <div>
+        <h1 class="font-extrabold text-xl text-white leading-none">AgriSuri PH</h1>
+        <p class="text-[11px] text-blue-300 mt-1">DA Officer Dashboard</p>
+      </div>
+    </div>
+    <div class="p-4 mx-3 my-4 bg-blue-900/60 rounded-2xl border border-blue-700/50 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-black text-sm border border-blue-400/30">
+        <span id="sidebar-avatar">🏛️</span>
+      </div>
+      <div>
+        <span class="text-xs font-bold text-white block" id="sidebar-name">Loading...</span>
+        <span class="text-[10px] text-blue-300">Department of Agriculture</span>
+      </div>
+    </div>
+    <nav class="flex-1 px-3 space-y-1.5">
+      <div class="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-bold text-white bg-blue-700/80 shadow-md">
+        <i class="fa-solid fa-landmark text-base text-blue-200"></i>
+        <span>Government Monitoring</span>
+      </div>
+    </nav>
+    <div class="p-4 border-t border-blue-800/80 space-y-2 no-print">
+      <button onclick="window.print()" class="w-full flex items-center justify-center gap-2 bg-blue-800/60 hover:bg-blue-700 text-blue-100 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-blue-700/50 transition-colors">
+        <i class="fa-solid fa-print"></i> I-print ang Ulat
+      </button>
+      <button onclick="doLogout()" class="w-full flex items-center justify-between bg-blue-900/40 hover:bg-red-900/50 text-blue-200 hover:text-red-200 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-blue-800/40 transition-colors">
+        <span class="flex items-center gap-2"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="flex-1 flex flex-col min-h-screen">
+
+    <!-- MOBILE HEADER -->
+    <header class="md:hidden bg-white px-4 py-3 border-b border-blue-100 flex items-center justify-between sticky top-0 z-40 shadow-sm no-print">
+      <div class="flex items-center gap-2">
+        <img src="assets/Logo_AgriSuri.png" class="w-8 h-8">
+        <div>
+          <h1 class="text-[#0d3b6e] font-black text-base leading-none">AgriSuri PH</h1>
+          <p class="text-[10px] text-gray-500">DA Officer Dashboard</p>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="window.print()" class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-200 no-print">
+          <i class="fa-solid fa-print"></i>
+        </button>
+        <button onclick="doLogout()" class="text-xs font-bold text-red-600 bg-red-50 px-3 py-1.5 rounded-xl border border-red-200 no-print">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- DESKTOP TOPBAR -->
+    <header class="hidden md:flex bg-white/90 backdrop-blur-md px-8 py-4 border-b border-blue-100 justify-between items-center sticky top-0 z-30 shadow-sm no-print">
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 bg-blue-50 px-3 py-2 rounded-2xl border border-blue-200">
+          <div class="live-dot"></div>
+          <span class="text-xs font-bold text-[#0d3b6e]">Live Government Feed</span>
+        </div>
+        <span class="text-xs text-gray-500 font-semibold">Central Luzon • Nueva Ecija</span>
+      </div>
+      <span class="text-xs font-black text-[#0d3b6e] bg-blue-100 px-3 py-1 rounded-full border border-blue-200">DA Officer</span>
+    </header>
+
+    <main class="flex-1 px-4 py-5 md:px-8 md:py-6 space-y-6 max-w-7xl mx-auto w-full pb-10">
+
+      <!-- PRINT HEADER (only shows when printing) -->
+      <div class="hidden print:block text-center mb-6">
+        <h1 class="text-xl font-black text-gray-800">AgriSuri PH — Disease Surveillance Report</h1>
+        <p class="text-sm text-gray-500">Department of Agriculture · Central Luzon · <span id="print-date"></span></p>
+      </div>
+
+      <!-- OUTBREAK BANNER -->
+      <div id="ob-banner" class="hidden bg-red-50 border-2 border-red-300 rounded-3xl p-5 fade-up">
+        <div class="flex items-center gap-2 mb-3">
+          <i class="fa-solid fa-circle-exclamation text-red-500 text-xl"></i>
+          <h3 class="font-black text-red-700 text-sm">AKTIBONG OUTBREAK ALERTS — Kailangan ng Aksyon</h3>
+        </div>
+        <div id="ob-pills" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- METRIC CARDS -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 fade-up">
+        <div class="bg-white rounded-3xl p-4 shadow-sm border border-blue-100 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-blue-100 text-[#0d3b6e] flex items-center justify-center text-xl"><i class="fa-solid fa-users"></i></div>
+          <div><p class="text-[10px] font-black text-gray-400 uppercase">Farmers</p><p class="text-2xl font-black text-gray-800" id="m-farmers">—</p></div>
+        </div>
+        <div class="bg-white rounded-3xl p-4 shadow-sm border border-blue-100 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl"><i class="fa-solid fa-magnifying-glass"></i></div>
+          <div><p class="text-[10px] font-black text-gray-400 uppercase">Detections</p><p class="text-2xl font-black text-gray-800" id="m-total">—</p></div>
+        </div>
+        <div class="bg-white rounded-3xl p-4 shadow-sm border border-blue-100 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-red-100 text-red-700 flex items-center justify-center text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div><p class="text-[10px] font-black text-gray-400 uppercase">Active Outbreaks</p><p class="text-2xl font-black text-gray-800" id="m-outbreaks">—</p></div>
+        </div>
+        <div class="bg-white rounded-3xl p-4 shadow-sm border border-blue-100 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl"><i class="fa-solid fa-location-dot"></i></div>
+          <div><p class="text-[10px] font-black text-gray-400 uppercase">Affected Areas</p><p class="text-2xl font-black text-gray-800" id="m-locations">—</p></div>
+        </div>
+      </div>
+
+      <!-- OUTBREAK ALERTS DETAIL -->
+      <div class="bg-white rounded-3xl p-5 shadow-sm border border-blue-100 space-y-4 fade-up">
+        <h3 class="text-xs font-black text-[#0d3b6e] uppercase tracking-wider flex items-center gap-2">
+          <i class="fa-solid fa-bell text-red-500"></i> Outbreak Alert Details
+        </h3>
+        <div id="alert-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="text-center py-6 text-gray-400 text-sm col-span-full">Nilo-load...</div>
+        </div>
+      </div>
+
+      <!-- CHARTS -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 fade-up">
+        <div class="bg-white p-5 rounded-3xl shadow-sm border border-blue-100 space-y-3">
+          <h3 class="text-xs font-black text-[#0d3b6e] uppercase tracking-wider">Disease Distribution</h3>
+          <div class="h-64 relative"><canvas id="c-disease"></canvas></div>
+        </div>
+        <div class="bg-white p-5 rounded-3xl shadow-sm border border-blue-100 space-y-3">
+          <h3 class="text-xs font-black text-[#0d3b6e] uppercase tracking-wider">Monthly Trend (6 Months)</h3>
+          <div class="h-64 relative"><canvas id="c-monthly"></canvas></div>
+        </div>
+      </div>
+
+      <!-- LOCATION RISK TABLE -->
+      <div class="bg-white rounded-3xl shadow-sm border border-blue-100 overflow-hidden fade-up">
+        <div class="px-5 py-4 border-b border-gray-100">
+          <h3 class="text-xs font-black text-[#0d3b6e] uppercase tracking-wider">Risk Level per Location</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-gray-600">
+            <thead class="bg-blue-50 text-[#0d3b6e] font-black uppercase text-[10px]">
+              <tr>
+                <th class="p-3">Lugar</th>
+                <th class="p-3">Detections</th>
+                <th class="p-3">Top Disease</th>
+                <th class="p-3">Risk Level</th>
+                <th class="p-3">Huling Detection</th>
+              </tr>
+            </thead>
+            <tbody id="loc-tbody">
+              <tr><td colspan="5" class="p-4 text-center text-gray-400">Nilo-load...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- OFFICIAL REPORT -->
+      <div class="bg-white rounded-3xl p-5 shadow-sm border border-blue-100 fade-up">
+        <div class="flex items-center justify-between mb-4 no-print">
+          <h3 class="text-xs font-black text-[#0d3b6e] uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-file-lines text-blue-500"></i> Opisyal na Ulat
+          </h3>
+          <button onclick="window.print()" class="bg-[#0d3b6e] text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2">
+            <i class="fa-solid fa-print"></i> I-print
+          </button>
+        </div>
+        <div class="text-sm text-gray-700 leading-relaxed space-y-3" id="report-body">
+          <p>Nilo-load ang ulat...</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const sb = window.supabase.createClient(
+      'https://qyiqodoqvavrqfddaxbn.supabase.co',
+      'sb_publishable_T-usxsctS9q0qHvvw-_FJA_rxOtH1yN'
+    );
+    let dets=[], alerts=[], charts={};
+
+    // Set print date
+    document.getElementById('print-date').textContent = new Date().toLocaleDateString('en-PH',{month:'long',day:'numeric',year:'numeric'});
+
+    // AUTH CHECK
+    sb.auth.getSession().then(async({data:{session}}) => {
+      if (!session) { window.location.href='auth.html'; return; }
+      const {data:p} = await sb.from('users').select('name,role').eq('id',session.user.id).single();
+      if (!p || !['admin','da_officer'].includes(p.role)) { alert('Walang access.'); doLogout(); return; }
+      document.getElementById('sidebar-name').textContent = p.name || 'DA Officer';
+      await loadData();
+      setupRealtime();
+    });
+
+    async function loadData() {
+      const [dr,fr,ar] = await Promise.all([
+        sb.from('detections').select('*,users(name,barangay)').order('created_at',{ascending:false}).limit(500),
+        sb.from('users').select('*').eq('role','farmer'),
+        sb.from('alerts').select('*').eq('resolved',false).order('created_at',{ascending:false})
+      ]);
+      dets=dr.data||[]; alerts=ar.data||[];
+      renderAll(fr.data||[]);
+    }
+
+    function renderAll(farmers) {
+      renderMetrics(farmers); renderOutbreakBanner(); renderAlertGrid(); renderCharts(); renderLocationTable(); renderReport(farmers);
+    }
+
+    function renderMetrics(farmers) {
+      const locs = new Set(dets.filter(d=>d.location_name).map(d=>d.location_name));
+      document.getElementById('m-farmers').textContent   = farmers.length;
+      document.getElementById('m-total').textContent     = dets.length;
+      document.getElementById('m-outbreaks').textContent = alerts.length;
+      document.getElementById('m-locations').textContent = locs.size || '—';
+    }
+
+    function renderOutbreakBanner() {
+      const high = alerts.filter(a=>a.severity==='high');
+      if (!high.length) return;
+      document.getElementById('ob-banner').classList.remove('hidden');
+      document.getElementById('ob-pills').innerHTML = high.map(a=>
+        `<span class="bg-red-100 text-red-700 border border-red-200 rounded-2xl px-3 py-1.5 text-xs font-bold">🚨 ${a.disease} · ${a.location_name||'Unknown'} (${a.affected_count} cases)</span>`
+      ).join('');
+    }
+
+    function renderAlertGrid() {
+      const g = document.getElementById('alert-grid');
+      if (!alerts.length) { g.innerHTML='<div class="text-center py-6 text-gray-400 text-sm col-span-full">✅ Walang active outbreak alerts. Maayos ang sitwasyon.</div>'; return; }
+      g.innerHTML = alerts.slice(0,6).map(a=>`
+        <div class="rounded-2xl p-4 border-2 ${a.severity==='high'?'border-red-300 bg-red-50':'border-amber-200 bg-amber-50'}">
+          <p class="font-black text-sm text-gray-800 mb-1">🦠 ${a.disease}</p>
+          <p class="text-xs text-gray-500">📍 ${a.location_name||'Unknown'}</p>
+          <p class="text-xs font-bold mt-2 ${a.severity==='high'?'text-red-600':'text-amber-600'}">${a.affected_count} cases sa loob ng 7 araw</p>
+          <span class="inline-block mt-2 text-[10px] font-black px-2 py-1 rounded-full ${a.severity==='high'?'bg-red-200 text-red-800':'bg-amber-200 text-amber-800'}">${a.severity==='high'?'🚨 CRITICAL':'⚠ WARNING'}</span>
+        </div>`).join('');
+    }
+
+    function renderCharts() {
+      const dc={};
+      dets.forEach(d=>dc[d.disease]=(dc[d.disease]||0)+1);
+      const ds=Object.entries(dc).sort((a,b)=>b[1]-a[1]);
+      const COLORS={'Rice Blast':'#c05000','Bacterial Leaf Blight':'#b84a00','Brown Spot':'#8a5a00','Healthy Rice':'#1e7a3e','Early Blight':'#d04000','Late Blight':'#a03000','Leaf Mold':'#7a4a20','Healthy Tomato':'#2d8a4e'};
+
+      if(charts.d) charts.d.destroy();
+      charts.d = new Chart(document.getElementById('c-disease'),{
+        type:'bar', data:{ labels:ds.map(([d])=>d), datasets:[{ data:ds.map(([,c])=>c), backgroundColor:ds.map(([d])=>COLORS[d]||'#7ab87a'), borderRadius:6 }] },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true},x:{ticks:{font:{size:9}}}} }
+      });
+
+      const now=new Date(), months=[], md=[];
+      for(let i=5;i>=0;i--) {
+        const dt=new Date(now.getFullYear(),now.getMonth()-i,1);
+        months.push(dt.toLocaleDateString('en-PH',{month:'short',year:'2-digit'}));
+        md.push(dets.filter(d=>{ const dd=new Date(d.created_at); return dd.getMonth()===dt.getMonth()&&dd.getFullYear()===dt.getFullYear(); }).length);
+      }
+      if(charts.m) charts.m.destroy();
+      charts.m = new Chart(document.getElementById('c-monthly'),{
+        type:'line', data:{ labels:months, datasets:[{ label:'Detections', data:md, borderColor:'#0d3b6e', backgroundColor:'rgba(13,59,110,.1)', tension:.3, fill:true, pointRadius:5, pointBackgroundColor:'#0d3b6e' }] },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+      });
+    }
+
+    function renderLocationTable() {
+      const tbody = document.getElementById('loc-tbody');
+      const lm={};
+      dets.forEach(d=>{ const loc=d.location_name||d.users?.barangay||'Unknown'; if(!lm[loc])lm[loc]={total:0,diseases:{},last:null}; lm[loc].total++; lm[loc].diseases[d.disease]=(lm[loc].diseases[d.disease]||0)+1; if(!lm[loc].last)lm[loc].last=d.created_at; });
+      const locs=Object.entries(lm).sort((a,b)=>b[1].total-a[1].total);
+      if (!locs.length) { tbody.innerHTML='<tr><td colspan="5" class="p-4 text-center text-gray-400">Walang location data pa.</td></tr>'; return; }
+      tbody.innerHTML = locs.map(([loc,data])=>{
+        const top=Object.entries(data.diseases).sort((a,b)=>b[1]-a[1])[0];
+        const diseased=Object.entries(data.diseases).filter(([d])=>!d.toLowerCase().includes('healthy')).reduce((s,[,c])=>s+c,0);
+        const risk=diseased>=5?'high':diseased>=2?'medium':'low';
+        const riskBadge=risk==='high'?'bg-red-100 text-red-700':risk==='medium'?'bg-amber-100 text-amber-700':'bg-green-100 text-green-700';
+        const riskLabel=risk==='high'?'🔴 High':risk==='medium'?'🟡 Medium':'🟢 Low';
+        return `<tr class="border-b border-gray-50 hover:bg-blue-50/30">
+          <td class="p-3 font-semibold">📍 ${loc}</td>
+          <td class="p-3 font-black text-[#0d3b6e]">${data.total}</td>
+          <td class="p-3">${top?top[0]:'—'}</td>
+          <td class="p-3"><span class="text-[10px] font-bold px-2 py-1 rounded-full ${riskBadge}">${riskLabel}</span></td>
+          <td class="p-3 text-[11px] text-gray-400">${fmtDate(data.last)}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function renderReport(farmers) {
+      const today = new Date().toLocaleDateString('en-PH',{month:'long',day:'numeric',year:'numeric'});
+      const diseased = dets.filter(d=>!d.disease?.toLowerCase().includes('healthy')).length;
+      const rate = dets.length>0 ? Math.round(diseased/dets.length*100) : 0;
+      const dc={};
+      dets.filter(d=>!d.disease?.toLowerCase().includes('healthy')).forEach(d=>dc[d.disease]=(dc[d.disease]||0)+1);
+      const top3=Object.entries(dc).sort((a,b)=>b[1]-a[1]).slice(0,3);
+      document.getElementById('report-body').innerHTML = `
+        <p><strong>Petsa ng Ulat:</strong> ${today}</p>
+        <p><strong>Lugar:</strong> Central Luzon, Philippines</p>
+        <p><strong>Bilang ng Farmers na Monitored:</strong> ${farmers.length}</p>
+        <p><strong>Kabuuang Detections:</strong> ${dets.length} (${rate}% may sakit)</p>
+        <p><strong>Active Outbreaks:</strong> ${alerts.length}</p>
+        ${top3.length?`<p><strong>Nangungunang Sakit:</strong></p><ul class="list-disc list-inside ml-4">${top3.map(([d,c])=>`<li>${d}: ${c} cases</li>`).join('')}</ul>`:''}
+        <p><strong>Rekomendasyon:</strong> ${alerts.length>0?'Mag-deploy ng agricultural extension workers sa mga affected areas. Mag-distribute ng fungicide at treatment materials sa mga farmers.':'Patuloy na bantayan. Walang emergency intervention na kailangan sa kasalukuyan.'}</p>`;
+    }
+
+    function setupRealtime() {
+      sb.channel('da-live')
+        .on('postgres_changes',{event:'INSERT',schema:'public',table:'detections'},()=>loadData())
+        .on('postgres_changes',{event:'INSERT',schema:'public',table:'alerts'},()=>loadData())
+        .subscribe();
+    }
+
+    function fmtDate(s) {
+      if(!s) return '—';
+      return new Date(s).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
+    }
+
+    async function doLogout() { await sb.auth.signOut(); window.location.href='auth.html'; }
+  </script>
+</body>
+</html>
